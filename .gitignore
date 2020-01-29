@@ -1,0 +1,6 @@
+*.npy
+disentangled_vae/checkpoints
+disentangled_vae/logs
+disentangled_vae/disentangle_anim
+disentangled_vae/disentangle_img
+disentangled_vae/reconstr_img
