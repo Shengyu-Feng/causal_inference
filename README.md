@@ -12,4 +12,4 @@ Reconstruction of [Causal Confusion in Imitation Learning](https://arxiv.org/pdf
 ## Upstream Repositories
 
 - https://github.com/miyosuda/disentangled_vae
-- https://github.com/uber-research/CoordConv/blob/master/README.md
+- https://github.com/uber-research/CoordConv
