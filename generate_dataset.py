@@ -38,6 +38,6 @@ if __name__ == '__main__':
             break;
 
     states = np.vstack(states)
-    states = np.moveaxis(states, -1, 1)
+    states = np.random.shuffle(np.moveaxis(states, -1, 1))
     np.save("toy_states.npy", states)
 
