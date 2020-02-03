@@ -163,13 +163,12 @@ def load_checkpoint(args):
 
 
 
-def main():   
+def main(args):   
     C_max = args.capacity_limit 
     stop_iter = args.capacity_change_duration
     beta = args.beta 
     model, global_iter = load_checkpoint(args) 
     model.cuda()
-    global_iter = 0
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
     atari_dataset = AtariDataset(args.dataset)
     train_loader = DataLoader(atari_dataset, batch_size=args.batch_size,
@@ -193,7 +192,7 @@ def main():
                     epoch, batch_idx * len(data), len(train_loader.dataset),
                     100. * batch_idx / len(train_loader),
                     loss.cpu().data.numpy(), mse.item(), dkl.item()))
-        save_checkpoint(model, args.checkpoint)
+        save_checkpoint(model, global_iter, args.checkpoint)
         org_img = data.cpu().numpy()[0][0]
         reconstr_img = recon_batch.data.cpu().numpy()[0][0]
         imsave("org_img.png",      org_img)
@@ -203,14 +202,14 @@ def main():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Beta-VAE')
 
-    parser.add_argument('--epoch_size', default=30, type=int, help='epoch size')
+    parser.add_argument('--epoch_size', default=100, type=int, help='epoch size')
     parser.add_argument('--batch_size', default=64, type=int, help='batch size')
     parser.add_argument('--capacity_limit', default=25.0, type=float, help='encoding capacity limit param for latent loss')
     parser.add_argument('--capacity_change_duration', default=100000, type=int, help='encoding capacity change duration')
     parser.add_argument('--latent_size', default=10, type=int, help='dimension of the representation z')
     parser.add_argument('--beta', default=4, type=int, help='beta param for latent loss')
     parser.add_argument('--checkpoint', default="checkpoints", type=str, help='path to the checkpoint')
-    parser.add_argument('--dataset', default="ministate.npy", type=str, help='path to the dataset')
+    parser.add_argument('--dataset', default="ministates.npy", type=str, help='path to the dataset')
     args = parser.parse_args()
     
     main(args)
