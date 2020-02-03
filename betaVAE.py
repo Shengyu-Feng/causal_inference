@@ -149,7 +149,7 @@ def save_checkpoint(model, global_iter, file_path):
             torch.save(states, f)
 
 def load_checkpoint(args):
-    file_path = args.checkpoint
+    file_path = args.load_path
     model = VAE(args.latent_size) 
     global_iter = 0
     if os.path.isfile(file_path):
@@ -167,7 +167,11 @@ def main(args):
     C_max = args.capacity_limit 
     stop_iter = args.capacity_change_duration
     beta = args.beta 
-    model, global_iter = load_checkpoint(args.load_path) 
+    if args.load_path:
+        model, global_iter = load_checkpoint(args)
+    else:
+        model = VAE(args.latent_size)
+        global_iter = 0
     model.cuda()
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
     atari_dataset = AtariDataset(args.dataset)
@@ -208,7 +212,7 @@ if __name__ == '__main__':
     parser.add_argument('--capacity_change_duration', default=40000, type=int, help='encoding capacity change duration')
     parser.add_argument('--latent_size', default=10, type=int, help='dimension of the representation z')
     parser.add_argument('--beta', default=1, type=int, help='beta param for latent loss')
-    parser.add_argument('--load_path', default="checkpoints/checkpoint-0", type=str, help='path to load the checkpoint')
+    parser.add_argument('--load_path', default=None, type=str, help='path to load the checkpoint')
     parser.add_argument('--save_path', default="checkpoints/checkpoint-0", type=str, help='path to save the checkpoint')
     parser.add_argument('--dataset', default="ministates.npy", type=str, help='path to the dataset')
     args = parser.parse_args()
