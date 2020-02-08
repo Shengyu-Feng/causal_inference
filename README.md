@@ -14,3 +14,4 @@ Reconstruction of [Causal Confusion in Imitation Learning](https://arxiv.org/pdf
 - https://github.com/miyosuda/disentangled_vae
 - https://github.com/uber-research/CoordConv
 - https://github.com/1Konny/Beta-VAE
+- https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail
