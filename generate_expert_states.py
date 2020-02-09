@@ -13,7 +13,7 @@ env = make_vec_envs(
 
 ppo, ob_rms = torch.load("models/PongNoFrameskip-v4.pt")
 recurrent_hidden_states = torch.zeros(1, ppo.recurrent_hidden_state_size).cuda()
-masks = torch.zeros(1, 1).cuda()
+masks = torch.zeros(1, 10).cuda()
 
 obs = env.reset()
 count = 0
@@ -24,9 +24,8 @@ while True:
     with torch.no_grad():
         value, action, _, recurrent_hidden_states = ppo.act(
             obs, recurrent_hidden_states, masks, True)
-    obs_train.append(obs.data)
-    action_train.append(action.data)
-    # Obser reward and next obs
+    obs_train.append(obs.cpu())
+    action_train.append(action.cpu())
     obs, reward, done, _ = env.step(action)
     masks = torch.FloatTensor(
                 [[0.0] if done_ else [1.0] for done_ in done])
@@ -39,5 +38,5 @@ states = {
     "obs": obs_train,
     "action": action_train
 }
-with open("expert_trajectory/expert50000", mode="wb+") as f:
+with open("expert_states/expert50000", mode="wb+") as f:
     torch.save(states, f)
