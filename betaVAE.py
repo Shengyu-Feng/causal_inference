@@ -173,7 +173,7 @@ def main(args):
         model = VAE(args.latent_size)
         global_iter = 0
     model.cuda()
-    optimizer = optim.Adam(model.parameters(), lr=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
     atari_dataset = AtariDataset(args.dataset)
     train_loader = DataLoader(atari_dataset, batch_size=args.batch_size,
                         shuffle=True, num_workers=4)
@@ -208,10 +208,11 @@ if __name__ == '__main__':
 
     parser.add_argument('--epoch_size', default=20, type=int, help='epoch size')
     parser.add_argument('--batch_size', default=64, type=int, help='batch size')
+    parser.add_argument('--learning_rate', default=1e-4, type=float, help='learning rate')
     parser.add_argument('--capacity_limit', default=25.0, type=float, help='encoding capacity limit param for latent loss')
     parser.add_argument('--capacity_change_duration', default=40000, type=int, help='encoding capacity change duration')
     parser.add_argument('--latent_size', default=10, type=int, help='dimension of the representation z')
-    parser.add_argument('--beta', default=1, type=int, help='beta param for latent loss')
+    parser.add_argument('--beta', default=1, type=float, help='beta param for latent loss')
     parser.add_argument('--load_path', default=None, type=str, help='path to load the checkpoint')
     parser.add_argument('--save_path', default="checkpoints/checkpoint-0", type=str, help='path to save the checkpoint')
     parser.add_argument('--dataset', default="ministates.npy", type=str, help='path to the dataset')
